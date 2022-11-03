@@ -1,6 +1,4 @@
-
 version: '3.3'
-
 services:
   hng-frontend_svc:
     image:
