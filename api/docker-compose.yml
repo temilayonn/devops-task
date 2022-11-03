@@ -1,0 +1,10 @@
+
+version: '3.3'
+
+services:
+  hng-frontend_svc:
+    image:
+      ${DOCKER_REGISTRY}hng-frontend:latest
+    ports:
+      - "4200:80"
+    restart: always
