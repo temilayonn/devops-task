@@ -7,12 +7,13 @@ pool:
     - Agent.Name -equals vm-pkw-db-monitor
 
 variables:
-  - template: ./pipeline/variables.yml
+  - template: pipeline/variables.yml
+
 
 steps:
-  - template: /pipeline/login-step.yml
-  - template: /pipeline/build-push-step.yml
-  - template: /pipeline/pull-step.yml
-  - template: /pipeline/update-compose-step.yml
-  - template: /pipeline/start-services-step.yml
-  - template: /pipeline/list-containers-step.yml
+  - template: pipeline/login-step.yml
+  - template: pipeline/build-push-step.yml
+  - template: pipeline/pull-step.yml
+  - template: pipeline/update-compose-step.yml
+  - template: pipeline/start-services-step.yml
+  - template: pipeline/list-containers-step.yml
