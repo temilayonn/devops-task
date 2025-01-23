@@ -1,0 +1,5 @@
+steps:
+  - script: |
+      echo "Starting services using Docker Compose..."
+      docker-compose up -d
+    displayName: 'Start Docker Services'
