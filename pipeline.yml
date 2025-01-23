@@ -7,22 +7,12 @@ pool:
     - Agent.Name -equals vm-pkw-db-monitor
 
 variables:
-  - name: DOCKER_USERNAME
-    value: $(DOCKER_USERNAME)
-  - name: DOCKER_PASSWORD
-    value: $(DOCKER_PASSWORD)
-  - name: FRONTEND_IMAGE
-    value: $(FRONTEND_IMAGE)
-  - name: BACKEND_IMAGE
-    value: $(BACKEND_IMAGE)
-  - name: DOCKER_IMAGE_TAG
-    value: $(DOCKER_IMAGE_TAG)
+  - template: ./pipeline/variables.yml
 
 steps:
-  - template: ./pipeline/steps-template.yml
-    parameters:
-      docker_username: $(DOCKER_USERNAME)
-      docker_password: $(DOCKER_PASSWORD)
-      frontend_image: $(FRONTEND_IMAGE)
-      backend_image: $(BACKEND_IMAGE)
-      docker_image_tag: $(DOCKER_IMAGE_TAG)
+  - template: /pipeline/login-step.yml
+  - template: /pipeline/build-push-step.yml
+  - template: /pipeline/pull-step.yml
+  - template: /pipeline/update-compose-step.yml
+  - template: /pipeline/start-services-step.yml
+  - template: /pipeline/list-containers-step.yml
