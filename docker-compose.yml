@@ -1,20 +1,39 @@
+version: '3'
 
 services:
   frontend_svc:
     container_name: frontend
     build:
-      context: ./frontend  
-      dockerfile: Dockerfile  
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "4200:80"  
+      - "4200:80"  # Map frontend's port 80 to port 4200 on the host
     restart: always
     depends_on:
-      - backend_svc 
+      - backend_svc
+
   backend_svc:
     container_name: backend
     build:
-      context: ./backend  
-      dockerfile: Dockerfile  
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
-      - "1515:1515"
+      - "1515:1515"  # Map backend's port 1515 to port 1515 on the host
     restart: always
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/reversed_ips  # MongoDB connection URI
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: mongo
+    image: mongo:latest  # Use the official MongoDB image
+    ports:
+      - "27017:27017"  # Expose MongoDB on port 27017
+    restart: always
+    networks:
+      - ipreverse-network
+
+networks:
+  ipreverse-network:
+    driver: bridge
