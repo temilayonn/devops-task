@@ -2,5 +2,5 @@ steps:
   - script: |
       echo "Starting services using Docker Compose..."
       cd /home/tadeboye/test/devops-django-react-task
-      docker-compose -f docker-compose up -d --build
+      bash build.sh
     displayName: 'Start Docker Services'
