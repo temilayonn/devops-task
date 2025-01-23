@@ -1,93 +1,95 @@
 trigger:
-- main
+  - main
 
 pool:
-  vmImage: ubuntu-latest
+  name: 'Default' 
+  demands:
+    - Agent.Name -equals vm-pkw-db-monitor 
 
 steps:
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: |
-      #!/bin/bash
-      
-      # Variables
-      DOCKER_USERNAME="adeboyet"   # Replace with your Docker Hub username
-      DOCKER_PASSWORD="dckr_pat_2fNxiC20npgaiLAAQiXnowR3Zpw"   # Replace with your Docker Hub password or PAT
-      FRONTEND_IMAGE="frontend"                # Name of the frontend image
-      BACKEND_IMAGE="backend"                  # Name of the backend image
-      DOCKER_IMAGE_TAG="latest"                # Docker image tag
-      DOCKER_FRONTEND_REPO="$DOCKER_USERNAME/$FRONTEND_IMAGE"
-      DOCKER_BACKEND_REPO="$DOCKER_USERNAME/$BACKEND_IMAGE"
-      
-      # Step 1: Login to Docker Hub
-      echo "Logging into Docker Hub..."
-      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to login to Docker Hub."
-        exit 1
-      fi
-      
-      # Step 2: Build and Tag Docker Images for Frontend and Backend
-      echo "Building frontend Docker image..."
-      docker build -t "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG" ./frontend
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to build frontend Docker image."
-        exit 1
-      fi
-      
-      echo "Building backend Docker image..."
-      docker build -t "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG" ./backend
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to build backend Docker image."
-        exit 1
-      fi
-      
-      # Step 3: Push Images to Docker Hub
-      echo "Pushing frontend Docker image to Docker Hub..."
-      docker push "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG"
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to push frontend Docker image."
-        exit 1
-      fi
-      
-      echo "Pushing backend Docker image to Docker Hub..."
-      docker push "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG"
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to push backend Docker image."
-        exit 1
-      fi
-      
-      # Step 4: Pull Images from Docker Hub
-      echo "Pulling frontend Docker image from Docker Hub..."
-      docker pull "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG"
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to pull frontend Docker image."
-        exit 1
-      fi
-      
-      echo "Pulling backend Docker image from Docker Hub..."
-      docker pull "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG"
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to pull backend Docker image."
-        exit 1
-      fi
-      
-      # Step 5: Update the docker-compose.yml file (optional)
-      echo "Updating docker-compose.yml to use pulled images..."
-      sed -i "s|image:.*frontend.*|image: $DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG|g" docker-compose.yml
-      sed -i "s|image:.*backend.*|image: $DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG|g" docker-compose.yml
-      
-      # Step 6: Start Services with Docker Compose
-      echo "Starting services using Docker Compose..."
-      docker-compose up -d
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to start services with Docker Compose."
-        exit 1
-      fi
-      
-      # Step 7: Display Running Services
-      echo "Listing running containers..."
-      docker-compose ps
-      
-      echo "Done! The frontend and backend services are built, pushed, pulled, and running on the host."
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        #!/bin/bash
+        
+        # Variables
+        DOCKER_USERNAME="adeboyet"   # Replace with your Docker Hub username
+        DOCKER_PASSWORD="dckr_pat_2fNxiC20npgaiLAAQiXnowR3Zpw"   # Replace with your Docker Hub password or PAT
+        FRONTEND_IMAGE="frontend"                # Name of the frontend image
+        BACKEND_IMAGE="backend"                  # Name of the backend image
+        DOCKER_IMAGE_TAG="latest"                # Docker image tag
+        DOCKER_FRONTEND_REPO="$DOCKER_USERNAME/$FRONTEND_IMAGE"
+        DOCKER_BACKEND_REPO="$DOCKER_USERNAME/$BACKEND_IMAGE"
+        
+        # Step 1: Login to Docker Hub
+        echo "Logging into Docker Hub..."
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        if [ $? -ne 0 ]; then
+          echo "Error: Failed to login to Docker Hub."
+          exit 1
+        fi
+        
+        # Step 2: Build and Tag Docker Images for Frontend and Backend
+        echo "Building frontend Docker image..."
+        docker build -t "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG" ./frontend
+        if [ $? -ne 0 ]; then
+          echo "Error: Failed to build frontend Docker image."
+          exit 1
+        fi
+        
+        echo "Building backend Docker image..."
+        docker build -t "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG" ./backend
+        if [ $? -ne 0 ]; then
+          echo "Error: Failed to build backend Docker image."
+          exit 1
+        fi
+        
+        # Step 3: Push Images to Docker Hub
+        echo "Pushing frontend Docker image to Docker Hub..."
+        docker push "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG"
+        if [ $? -ne 0 ]; then
+          echo "Error: Failed to push frontend Docker image."
+          exit 1
+        fi
+        
+        echo "Pushing backend Docker image to Docker Hub..."
+        docker push "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG"
+        if [ $? -ne 0 ]; then
+          echo "Error: Failed to push backend Docker image."
+          exit 1
+        fi
+        
+        # Step 4: Pull Images from Docker Hub
+        echo "Pulling frontend Docker image from Docker Hub..."
+        docker pull "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG"
+        if [ $? -ne 0 ]; then
+          echo "Error: Failed to pull frontend Docker image."
+          exit 1
+        fi
+        
+        echo "Pulling backend Docker image from Docker Hub..."
+        docker pull "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG"
+        if [ $? -ne 0 ]; then
+          echo "Error: Failed to pull backend Docker image."
+          exit 1
+        fi
+        
+        # Step 5: Update the docker-compose.yml file (optional)
+        echo "Updating docker-compose.yml to use pulled images..."
+        sed -i "s|image:.*frontend.*|image: $DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG|g" docker-compose.yml
+        sed -i "s|image:.*backend.*|image: $DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG|g" docker-compose.yml
+        
+        # Step 6: Start Services with Docker Compose
+        echo "Starting services using Docker Compose..."
+        docker-compose up -d
+        if [ $? -ne 0 ]; then
+          echo "Error: Failed to start services with Docker Compose."
+          exit 1
+        fi
+        
+        # Step 7: Display Running Services
+        echo "Listing running containers..."
+        docker-compose ps
+        
+        echo "Done! The frontend and backend services are built, pushed, pulled, and running on the host."
