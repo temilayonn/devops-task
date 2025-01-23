@@ -13,7 +13,7 @@ steps:
 - task: DockerInstaller@0
   displayName: 'Install Docker'
   inputs:
-    dockerVersion: 20.10.x                  # Use a specific Docker version or latest available
+    dockerVersion: 20.10.25                  # Specify a valid version
 
 - task: Bash@3
   displayName: 'Login to Docker Hub'
@@ -28,18 +28,18 @@ steps:
     targetType: 'inline'
     script: |
       docker-compose -f docker-compose.yml build --no-cache
-      docker-compose -f docker-compose.yml config  # Validate the configuration for debugging
+      docker-compose -f docker-compose.yml config  # Validate configuration
 
 - task: Bash@3
   displayName: 'Tag and Push Images to Docker Hub'
   inputs:
     targetType: 'inline'
     script: |
-      # Extract service names and images from docker-compose.yml
       IMAGES=$(docker-compose config | grep 'image:' | awk '{print $2}')
       for IMAGE in $IMAGES; do
-        echo "Tagging and pushing $IMAGE"
+        echo "Tagging $IMAGE as $(DOCKER_USERNAME)/$IMAGE:$(DOCKER_IMAGE_TAG)"
         docker tag $IMAGE $(DOCKER_USERNAME)/$IMAGE:$(DOCKER_IMAGE_TAG)
+        echo "Pushing $(DOCKER_USERNAME)/$IMAGE:$(DOCKER_IMAGE_TAG) to Docker Hub"
         docker push $(DOCKER_USERNAME)/$IMAGE:$(DOCKER_IMAGE_TAG)
       done
 
@@ -49,4 +49,5 @@ steps:
     targetType: 'inline'
     script: |
       docker-compose -f docker-compose.yml up -d
-      docker-compose ps  # Check running services for debugging
+      echo "Listing running containers:"
+      docker-compose ps
