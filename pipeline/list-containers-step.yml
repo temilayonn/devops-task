@@ -1,0 +1,5 @@
+steps:
+  - script: |
+      echo "Listing running containers..."
+      docker-compose ps
+    displayName: 'List Running Containers'
