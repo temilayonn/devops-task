@@ -2,106 +2,27 @@ trigger:
   - task
 
 pool:
-  name: 'Default' 
+  name: 'Default'
   demands:
-    - Agent.Name -equals vm-pkw-db-monitor 
+    - Agent.Name -equals vm-pkw-db-monitor
 
+variables:
+  - name: DOCKER_USERNAME
+    value: $(DOCKER_USERNAME)
+  - name: DOCKER_PASSWORD
+    value: $(DOCKER_PASSWORD)
+  - name: FRONTEND_IMAGE
+    value: $(FRONTEND_IMAGE)
+  - name: BACKEND_IMAGE
+    value: $(BACKEND_IMAGE)
+  - name: DOCKER_IMAGE_TAG
+    value: $(DOCKER_IMAGE_TAG)
 
 steps:
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: |
-      #!/bin/bash
-      
-      # Variables
-      DOCKER_USERNAME="adeboyet"   # Replace with your Docker Hub username
-      DOCKER_PASSWORD="dckr_pat_2fNxiC20npgaiLAAQiXnowR3Zpw"   # Replace with your Docker Hub password or PAT
-      FRONTEND_IMAGE="frontend"                # Name of the frontend image
-      BACKEND_IMAGE="backend"                  # Name of the backend image
-      DOCKER_IMAGE_TAG="latest"                # Docker image tag
-      DOCKER_FRONTEND_REPO="$DOCKER_USERNAME/$FRONTEND_IMAGE"
-      DOCKER_BACKEND_REPO="$DOCKER_USERNAME/$BACKEND_IMAGE"
-      
-      # Step 1: Login to Docker Hub
-      echo "Logging into Docker Hub..."
-      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to login to Docker Hub."
-        exit 1
-      fi
-      
-      # Step 2: Build and Tag Docker Images for Frontend and Backend
-      echo "Building frontend Docker image..."
-      docker build -t "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG" ./frontend
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to build frontend Docker image."
-        exit 1
-      fi
-      
-      echo "Building backend Docker image..."
-      docker build -t "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG" ./backend
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to build backend Docker image."
-        exit 1
-      fi
-      
-      # Step 3: Push Images to Docker Hub
-      echo "Pushing frontend Docker image to Docker Hub..."
-      docker push "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG"
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to push frontend Docker image."
-        exit 1
-      fi
-      
-      echo "Pushing backend Docker image to Docker Hub..."
-      docker push "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG"
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to push backend Docker image."
-        exit 1
-      fi
-      
-      # Step 4: Pull Images from Docker Hub
-      echo "Pulling frontend Docker image from Docker Hub..."
-      docker pull "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG"
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to pull frontend Docker image."
-        exit 1
-      fi
-      
-      echo "Pulling backend Docker image from Docker Hub..."
-      docker pull "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG"
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to pull backend Docker image."
-        exit 1
-      fi
-      
-      # Step 5: Update docker-compose.yml to use pulled images
-      echo "Updating docker-compose.yml to use pulled images..."
-      sed -i "s|image:.*frontend.*|image: $DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG|g" docker-compose.yml
-      sed -i "s|image:.*backend.*|image: $DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG|g" docker-compose.yml
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to update docker-compose.yml."
-        exit 1
-      fi
-
-      # # Step 6: Install Docker Compose (if not already installed)
-      # if ! command -v docker-compose &>/dev/null; then
-      #   echo "docker-compose not found. Installing..."
-      #   sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-      #   sudo chmod +x /usr/local/bin/docker-compose
-      # fi
-
-      # Step 7: Start Services with Docker Compose
-      echo "Starting services using Docker Compose..."
-      docker-compose up -d
-      if [ $? -ne 0 ]; then
-        echo "Error: Failed to start services with Docker Compose."
-        exit 1
-      fi
-      
-      # Step 8: Display Running Services
-      echo "Listing running containers..."
-      docker-compose ps
-      
-      echo "Done! The frontend and backend services are built, pushed, pulled, and running on the host."
+  - template: ./pipeline/steps-template.yml
+    parameters:
+      docker_username: $(DOCKER_USERNAME)
+      docker_password: $(DOCKER_PASSWORD)
+      frontend_image: $(FRONTEND_IMAGE)
+      backend_image: $(BACKEND_IMAGE)
+      docker_image_tag: $(DOCKER_IMAGE_TAG)
