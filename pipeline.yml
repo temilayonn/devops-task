@@ -12,7 +12,7 @@ steps:
       targetType: 'inline'
       script: |
         #!/bin/bash
-        
+        cd /home/tadeboye/test/devops-django-react-task
         # Variables
         DOCKER_USERNAME="adeboyet"   # Replace with your Docker Hub username
         DOCKER_PASSWORD="dckr_pat_2fNxiC20npgaiLAAQiXnowR3Zpw"   # Replace with your Docker Hub password or PAT
