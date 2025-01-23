@@ -32,14 +32,14 @@ steps:
         
         # Step 2: Build and Tag Docker Images for Frontend and Backend
         echo "Building frontend Docker image..."
-        sudo docker build -t "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG" ./frontend
+        docker build -t "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG" ./frontend
         if [ $? -ne 0 ]; then
           echo "Error: Failed to build frontend Docker image."
           exit 1
         fi
         
         echo "Building backend Docker image..."
-        sudo docker build -t "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG" ./backend
+        docker build -t "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG" ./backend
         if [ $? -ne 0 ]; then
           echo "Error: Failed to build backend Docker image."
           exit 1
@@ -47,14 +47,14 @@ steps:
         
         # Step 3: Push Images to Docker Hub
         echo "Pushing frontend Docker image to Docker Hub..."
-        sudo docker push "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG"
+        docker push "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG"
         if [ $? -ne 0 ]; then
           echo "Error: Failed to push frontend Docker image."
           exit 1
         fi
         
         echo "Pushing backend Docker image to Docker Hub..."
-        sudo docker push "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG"
+        docker push "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG"
         if [ $? -ne 0 ]; then
           echo "Error: Failed to push backend Docker image."
           exit 1
@@ -62,14 +62,14 @@ steps:
         
         # Step 4: Pull Images from Docker Hub
         echo "Pulling frontend Docker image from Docker Hub..."
-        sudo docker pull "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG"
+        docker pull "$DOCKER_FRONTEND_REPO:$DOCKER_IMAGE_TAG"
         if [ $? -ne 0 ]; then
           echo "Error: Failed to pull frontend Docker image."
           exit 1
         fi
         
         echo "Pulling backend Docker image from Docker Hub..."
-        sudo docker pull "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG"
+        docker pull "$DOCKER_BACKEND_REPO:$DOCKER_IMAGE_TAG"
         if [ $? -ne 0 ]; then
           echo "Error: Failed to pull backend Docker image."
           exit 1
@@ -82,7 +82,7 @@ steps:
         
         # Step 6: Start Services with Docker Compose
         echo "Starting services using Docker Compose..."
-        sudo docker-compose up -d
+        docker-compose up -d --build
         if [ $? -ne 0 ]; then
           echo "Error: Failed to start services with Docker Compose."
           exit 1
@@ -90,6 +90,6 @@ steps:
         
         # Step 7: Display Running Services
         echo "Listing running containers..."
-        sudo docker-compose ps -a
+        docker-compose ps -a
         
         echo "Done! The frontend and backend services are built, pushed, pulled, and running on the host."
