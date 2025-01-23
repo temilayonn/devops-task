@@ -33,10 +33,7 @@ class App extends Component {
       .catch((error) => console.error('Error fetching the IP address:', error));
   }
 
-  handleButtonClick = () => {
-    console.log('Make Request button clicked');
-    alert('Request made! Implement additional functionality here.');
-  };
+
 
   render() {
     return (
@@ -54,11 +51,6 @@ class App extends Component {
           Your Public IP Address in Reverse: <b>{this.state.clientIp || 'Fetching...'}</b>
         </p>
         {this.state.saved && <p style={{ color: 'green' }}>IP saved successfully!</p>}
-
-        {/* Button below all text */}
-        <button onClick={this.handleButtonClick} style={{ marginTop: '20px', padding: '10px 20px', fontSize: '16px' }}>
-          Make Request
-        </button>
       </div>
     );
   }

@@ -34,6 +34,7 @@ app.post('/save-ip', (req, res) => {
   });
 });
 
+
 // Fetch all saved IPs
 app.get('/ips', (req, res) => {
   db.run('SELECT * FROM ip_addresses', [], (err, rows) => {
