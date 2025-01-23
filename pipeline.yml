@@ -1,0 +1,52 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  DOCKER_USERNAME: adeboyet        # Replace with your Docker Hub username
+  DOCKER_PASSWORD: dckr_pat_2fNxiC20npgaiLAAQiXnowR3Zpw        # Use a secure variable in Azure DevOps
+  DOCKER_IMAGE_TAG: latest                  # Tag for your Docker images
+
+steps:
+- task: DockerInstaller@0
+  displayName: 'Install Docker'
+  inputs:
+    dockerVersion: 20.10.x                  # Use a specific Docker version or latest available
+
+- task: Bash@3
+  displayName: 'Login to Docker Hub'
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin
+
+- task: Bash@3
+  displayName: 'Build Docker Images using Docker Compose'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker-compose -f docker-compose.yml build --no-cache
+      docker-compose -f docker-compose.yml config  # Validate the configuration for debugging
+
+- task: Bash@3
+  displayName: 'Tag and Push Images to Docker Hub'
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Extract service names and images from docker-compose.yml
+      IMAGES=$(docker-compose config | grep 'image:' | awk '{print $2}')
+      for IMAGE in $IMAGES; do
+        echo "Tagging and pushing $IMAGE"
+        docker tag $IMAGE $(DOCKER_USERNAME)/$IMAGE:$(DOCKER_IMAGE_TAG)
+        docker push $(DOCKER_USERNAME)/$IMAGE:$(DOCKER_IMAGE_TAG)
+      done
+
+- task: Bash@3
+  displayName: 'Run Services using Docker Compose'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker-compose -f docker-compose.yml up -d
+      docker-compose ps  # Check running services for debugging
