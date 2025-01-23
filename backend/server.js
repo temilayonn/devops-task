@@ -7,10 +7,10 @@ const app = express();
 // Middleware
 app.use(cors());
 
-// MongoDB connection
-mongoose.connect('mongodb://mongo:27017/reversed_ips', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('Error connecting to MongoDB:', err));
+mongoose.connect(process.env.MONGODB_URI , {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
 
 // Routes
 app.use(reverseIPRoute);
