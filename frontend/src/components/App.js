@@ -4,62 +4,37 @@ import '../css/App.css';
 
 class App extends Component {
   state = {
-    originalIp: null,
-    reversedIp: null,
-    error: null,
+    clientIp: '', // State to hold the IP address
   };
 
   componentDidMount() {
-    // Fetch the reversed IP when the component mounts
-    fetch('/reverse_ip')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
+    fetch('https://api.ipify.org?format=json')
+      .then((response) => response.json())
       .then((data) => {
-        this.setState({
-          originalIp: data.originalIp, // Assuming the API returns 'originalIp' in the response
-          reversedIp: data.reversedIp,
-        });
+        // Reverse the IP address before setting it to state
+        const reversedIp = data.ip.split('').reverse().join('');
+        this.setState({ clientIp: reversedIp });
       })
-      .catch((error) => {
-        this.setState({ error: 'Failed to fetch reversed IP' });
-        console.error('Error fetching reversed IP:', error);
-      });
+      .catch((error) => console.error('Error fetching the IP address:', error));
   }
 
   render() {
-    const { originalIp, reversedIp, error } = this.state;
-
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">DevOps Stage Task</h1>
+          <h1 className="App-title">DevOps Stage1 Task</h1>
         </header>
         <p className="App-intro">
           This task was submitted by <b>Temilayonn</b>
         </p>
 
-        <div className="IP-info">
-          {error ? (
-            <p className="error">{error}</p>
-          ) : (
-            <React.Fragment>
-              <p>
-                <b>Original IP:</b> {originalIp || 'Fetching...'}
-              </p>
-              <p>
-                <b>Reversed IP:</b> {reversedIp || 'Fetching...'}
-              </p>
-            </React.Fragment>
-          )}
-        </div>
+        {/* Display the reversed IP address */}
+        <p>Your Public IP Address in Reverse: <b>{this.state.clientIp || "Fetching..."}</b></p>
       </div>
     );
   }
 }
 
 export default App;
+
