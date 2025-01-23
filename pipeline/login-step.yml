@@ -1,0 +1,5 @@
+steps:
+  - script: |
+      echo "Logging into Docker Hub..."
+      echo "$(DOCKER_PASSWORD)" | docker login -u "$(DOCKER_USERNAME)" --password-stdin
+    displayName: 'Login to Docker Hub'
