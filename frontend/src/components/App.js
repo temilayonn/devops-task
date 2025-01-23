@@ -9,6 +9,7 @@ class App extends Component {
   };
 
   componentDidMount() {
+    console.log('this is the first fetch')
     fetch('https://api.ipify.org?format=json')
       .then((response) => response.json())
       .then((data) => {
@@ -17,7 +18,7 @@ class App extends Component {
         this.setState({ clientIp: reversedIp });
 
         // Save reversed IP to the backend
-        fetch('http://localhost:5000/save-ip', {
+        fetch('http://20.125.114.94:1515/save-ip', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ip: reversedIp }),
@@ -32,6 +33,11 @@ class App extends Component {
       .catch((error) => console.error('Error fetching the IP address:', error));
   }
 
+  handleButtonClick = () => {
+    console.log('Make Request button clicked');
+    alert('Request made! Implement additional functionality here.');
+  };
+
   render() {
     return (
       <div className="App">
@@ -44,12 +50,18 @@ class App extends Component {
         </p>
 
         {/* Display the reversed IP address */}
-        <p>Your Public IP Address in Reverse: <b>{this.state.clientIp || "Fetching..."}</b></p>
+        <p>
+          Your Public IP Address in Reverse: <b>{this.state.clientIp || 'Fetching...'}</b>
+        </p>
         {this.state.saved && <p style={{ color: 'green' }}>IP saved successfully!</p>}
+
+        {/* Button below all text */}
+        <button onClick={this.handleButtonClick} style={{ marginTop: '20px', padding: '10px 20px', fontSize: '16px' }}>
+          Make Request
+        </button>
       </div>
     );
   }
 }
 
 export default App;
-
