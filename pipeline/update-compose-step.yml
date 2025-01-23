@@ -1,0 +1,6 @@
+steps:
+  - script: |
+      echo "Updating docker-compose.yml..."
+      sed -i "s|image:.*frontend.*|image: $(DOCKER_USERNAME)/$(FRONTEND_IMAGE):$(DOCKER_IMAGE_TAG)|g" docker-compose.yml
+      sed -i "s|image:.*backend.*|image: $(DOCKER_USERNAME)/$(BACKEND_IMAGE):$(DOCKER_IMAGE_TAG)|g" docker-compose.yml
+    displayName: 'Update docker-compose.yml'
