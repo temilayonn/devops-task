@@ -1,0 +1,14 @@
+steps:
+  - script: |
+      echo "Building frontend Docker image..."
+      docker build -t "$(DOCKER_USERNAME)/$(FRONTEND_IMAGE):$(DOCKER_IMAGE_TAG)" ./frontend
+      echo "Building backend Docker image..."
+      docker build -t "$(DOCKER_USERNAME)/$(BACKEND_IMAGE):$(DOCKER_IMAGE_TAG)" ./backend
+    displayName: 'Build Docker Images'
+
+  - script: |
+      echo "Pushing frontend Docker image to Docker Hub..."
+      docker push "$(DOCKER_USERNAME)/$(FRONTEND_IMAGE):$(DOCKER_IMAGE_TAG)"
+      echo "Pushing backend Docker image to Docker Hub..."
+      docker push "$(DOCKER_USERNAME)/$(BACKEND_IMAGE):$(DOCKER_IMAGE_TAG)"
+    displayName: 'Push Docker Images to Docker Hub'
