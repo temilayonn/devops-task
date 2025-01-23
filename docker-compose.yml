@@ -1,3 +1,4 @@
+
 services:
   frontend_svc:
     container_name: frontend
@@ -15,5 +16,5 @@ services:
       context: ./backend  
       dockerfile: Dockerfile  
     ports:
-      - "5000:5000"  
+      - "1515:1515"
     restart: always

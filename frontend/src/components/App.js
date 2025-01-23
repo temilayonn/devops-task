@@ -8,16 +8,14 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">HNGi9 DevOps Stage2 Task</h1>
+          <h1 className="App-title"> DevOps Stage Task</h1>
         </header>
         <p className="App-intro">
           This task was submitted by <b>Temilayonn</b>
         </p>
-        <h3> weird writing html, funky</h3>
       </div>
     );
   }
 }
 
 export default App;
-
