@@ -1,8 +1,19 @@
-version: '3.3'
 services:
-  hng-frontend_svc:
-    image:
-      ${DOCKER_REGISTRY}hng-frontend:latest
+  frontend_svc:
+    container_name: frontend
+    build:
+      context: ./frontend  
+      dockerfile: Dockerfile  
     ports:
-      - "4200:80"
+      - "4200:80"  
+    restart: always
+    depends_on:
+      - backend_svc 
+  backend_svc:
+    container_name: backend
+    build:
+      context: ./backend  
+      dockerfile: Dockerfile  
+    ports:
+      - "5000:5000"  
     restart: always
