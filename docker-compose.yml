@@ -17,7 +17,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "1515:1515"  # Map backend's port 1515 to port 1515 on the host
+      - "1515:5000"  # Map backend's port 1515 to port 1515 on the host
     restart: always
 #    environment:
 #      - MONGODB_URI=mongodb://myuser:myPassword@20.125.114.94:27017  # MongoDB connection URI
