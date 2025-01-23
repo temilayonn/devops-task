@@ -1,5 +1,3 @@
-
-
 import React, { Component } from 'react';
 import logo from '../img/testing.png';
 import '../css/App.css';
@@ -22,8 +20,8 @@ class App extends Component {
       })
       .then((data) => {
         this.setState({
-          originalIp: data.original_ip,
-          reversedIp: data.reversed_ip,
+          originalIp: data.originalIp, // Assuming the API returns 'originalIp' in the response
+          reversedIp: data.reversedIp,
         });
       })
       .catch((error) => {
@@ -46,19 +44,18 @@ class App extends Component {
         </p>
 
         <div className="IP-info">
-        {error ? (
-  <p className="error">{error}</p>
-) : (
-  <React.Fragment>
-    <p>
-      <b>Original IP:</b> {originalIp || 'Fetching...'}
-    </p>
-    <p>
-      <b>Reversed IP:</b> {reversedIp || 'Fetching...'}
-    </p>
-  </React.Fragment>
-)}
-
+          {error ? (
+            <p className="error">{error}</p>
+          ) : (
+            <React.Fragment>
+              <p>
+                <b>Original IP:</b> {originalIp || 'Fetching...'}
+              </p>
+              <p>
+                <b>Reversed IP:</b> {reversedIp || 'Fetching...'}
+              </p>
+            </React.Fragment>
+          )}
         </div>
       </div>
     );
