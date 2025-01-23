@@ -16,7 +16,6 @@ class App extends Component {
         // Reverse the IP address
         const reversedIp = data.ip.split('').reverse().join('');
         this.setState({ clientIp: reversedIp });
-
         // Save reversed IP to the backend
         fetch('http://20.125.114.94:1515/save-ip', {
           method: 'POST',
