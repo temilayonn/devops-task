@@ -1,0 +1,7 @@
+steps:
+  - script: |
+      echo "Pulling frontend Docker image from Docker Hub..."
+      docker pull "$(DOCKER_USERNAME)/$(FRONTEND_IMAGE):$(DOCKER_IMAGE_TAG)"
+      echo "Pulling backend Docker image from Docker Hub..."
+      docker pull "$(DOCKER_USERNAME)/$(BACKEND_IMAGE):$(DOCKER_IMAGE_TAG)"
+    displayName: 'Pull Docker Images from Docker Hub'
