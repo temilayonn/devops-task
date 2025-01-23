@@ -66,18 +66,19 @@ class App extends Component {
         </p>
 
         <div className="IP-info">
-          {error ? (
-            <p className="error">{error}</p>
-          ) : (
-            <>
-              <p>
-                <b>Original IP:</b> {originalIp || 'Fetching...'}
-              </p>
-              <p>
-                <b>Reversed IP:</b> {reversedIp || 'Fetching...'}
-              </p>
-            </>
-          )}
+        {error ? (
+  <p className="error">{error}</p>
+) : (
+  <React.Fragment>
+    <p>
+      <b>Original IP:</b> {originalIp || 'Fetching...'}
+    </p>
+    <p>
+      <b>Reversed IP:</b> {reversedIp || 'Fetching...'}
+    </p>
+  </React.Fragment>
+)}
+
         </div>
       </div>
     );
