@@ -1,4 +1,4 @@
-const IP = require('../models/ipModel');
+const IP = require('../models/ipModel.js');
 
 // Reverse the given IP address
 const reverseIP = (ip) => ip.split('.').reverse().join('.');
