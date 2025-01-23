@@ -8,8 +8,8 @@ services:
     ports:
       - "4200:80"  # Map frontend's port 80 to port 4200 on the host
     restart: always
-    depends_on:
-      - backend_svc
+#    depends_on:
+#      - backend_svc
 
   backend_svc:
     container_name: backend
@@ -19,8 +19,8 @@ services:
     ports:
       - "1515:1515"  # Map backend's port 1515 to port 1515 on the host
     restart: always
-    environment:
-      - MONGODB_URI=mongodb://localhost:27017/reversed_ips  # MongoDB connection URI
+#    environment:
+#      - MONGODB_URI=mongodb://myuser:myPassword@20.125.114.94:27017  # MongoDB connection URI
   #   depends_on:
   #     - mongo
 
