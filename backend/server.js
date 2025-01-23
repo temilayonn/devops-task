@@ -36,7 +36,7 @@ app.post('/save-ip', (req, res) => {
 
 // Fetch all saved IPs
 app.get('/ips', (req, res) => {
-  db.all('SELECT * FROM ip_addresses', [], (err, rows) => {
+  db.run('SELECT * FROM ip_addresses', [], (err, rows) => {
     if (err) {
       res.status(500).json({ error: 'Failed to fetch IP addresses' });
     } else {
