@@ -1,6 +1,6 @@
 variables:
   DOCKER_USERNAME: "adeboyet"
-  DOCKER_PASSWORD: "dckr_pat_2fNxiC20npgaiLAAQiXnowR3Zpw"
+  DOCKER_PASSWORD: ""
   FRONTEND_IMAGE: "frontend"
   BACKEND_IMAGE: "backend"
   DOCKER_IMAGE_TAG: "latest"
